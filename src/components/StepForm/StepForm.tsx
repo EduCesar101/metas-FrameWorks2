@@ -1,10 +1,11 @@
 import { useState } from "react";
 
 interface StepFormProps {
-    addStep: (text: string) => void;
+    idTodo: number,
+    addStep: (idTodo: number, text: string) => void;
 }
 
-export function StepForm( { addStep }: StepFormProps ) {
+export function StepForm( { idTodo, addStep }: StepFormProps) {
     const [value, setValue] = useState("")
 
     function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>){
@@ -13,7 +14,8 @@ export function StepForm( { addStep }: StepFormProps ) {
             alert("Preencha todos os campos!")
             return
         }
-        addStep(value)
+        addStep(idTodo, value)
+        console.log(idTodo, value)
         console.log("Enviou form");
         setValue("")
     }

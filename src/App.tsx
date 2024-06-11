@@ -57,20 +57,21 @@ function App() {
     setGenTodoId(newID)
   })
 
-  const addStep = ((idTodo: number ,text: string) => {
+  const addStep = ((idTodo: number, text: string) => {
     const newID = genStepId + 1
     const newSteps = [
       ...steps,
       {
         id: newID,
-        text,
-        idTodo,
+        text: text,
+        idTodo: idTodo,
         isCompleted: false
       },
     ];
 
     setSteps(newSteps);
-    setGenStepId(newID)
+    setGenStepId(newID);
+    console.log(newSteps)
   })
 
   const removeStep = ((id: number) => {
@@ -115,9 +116,9 @@ function App() {
             {steps.filter((step) => step.idTodo == todo.id).map((step) => (
               <div>
                 <Step {...step} key={step.id} removeStep={removeStep} completeStep={completeStep}/>
-                <StepForm addStep = {addStep(todo.id, '')}/>
               </div>
             ))}
+          <StepForm idTodo={todo.id} addStep = {addStep}/>
           </div>
         ))}
       </div>
