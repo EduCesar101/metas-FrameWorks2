@@ -45,6 +45,7 @@ function App() {
   const addTodo = ((text: string, category: string, finalDate: string) => {
     const newID = genTodoId + 1
     const newDate = new Date(finalDate)
+    console.log(newDate)
     console.log(newID)
     const newTodos = [
       ...todos,
@@ -104,6 +105,13 @@ function App() {
     setTodos(newTodos)
   })
 
+  const updateTodo = (id: number, updatedText: string, updatedCategory: string, updatedFinalDate: string) => {
+    const updatedTodos = todos.map((todo) =>
+      todo.id === id ? { ...todo, text: updatedText, category: updatedCategory, finalDate: new Date(updatedFinalDate) } : todo
+    );
+    setTodos(updatedTodos);
+  };
+
   return (
     <div className="app">
       <h1>Lista de Metas</h1>
@@ -117,7 +125,7 @@ function App() {
         .sort((a, b) => sort === "Asc" ? a.text.localeCompare(b.text) : b.text.localeCompare(a.text))
         .map((todo) => (
           <div>
-            <Todo {...todo} key = {todo.id} removeTodo={removeTodo} completeTodo={completeTodo}/>
+            <Todo {...todo} key = {todo.id} removeTodo={removeTodo} completeTodo={completeTodo} updateTodo={updateTodo}/>
             {steps.filter((step) => step.idTodo == todo.id).map((step) => (
               <div>
                 <Step {...step} key={step.id} removeStep={removeStep} completeStep={completeStep}/>
