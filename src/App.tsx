@@ -13,12 +13,14 @@ function App() {
       id: 1,
       text: "Estudar React",
       category: "Estudos",
+      finalDate: new Date('06-05-2024'),
       isCompleted: false
     },
     {
       id: 2,
       text: "Treinar",
       category: "Pessoal",
+      finalDate: new Date('01-05-2024'),
       isCompleted: false,
     },
   ]);
@@ -40,8 +42,9 @@ function App() {
   const [filter, setFilter] = useState("All");
   const [sort, setSort] = useState("Asc")
 
-  const addTodo = ((text: string, category: string) => {
+  const addTodo = ((text: string, category: string, finalDate: string) => {
     const newID = genTodoId + 1
+    const newDate = new Date(finalDate)
     console.log(newID)
     const newTodos = [
       ...todos,
@@ -49,6 +52,7 @@ function App() {
         id: newID,
         text,
         category,
+        finalDate: newDate,
         isCompleted: false
       },
     ];
@@ -102,9 +106,10 @@ function App() {
 
   return (
     <div className="app">
-      <h1>Lista de Tarefas</h1>
+      <h1>Lista de Metas</h1>
       <Search search={search} setSearch={setSearch}/>
       <Filter filter={filter} setFilter={setFilter} setSort={setSort}/>
+      <TodoForm addTodo = {addTodo}/>
       <div className="todo-list">
         {todos
         .filter((todo) => filter === "All" ? true : filter === "Completed" ? todo.isCompleted : !todo.isCompleted)
@@ -122,7 +127,6 @@ function App() {
           </div>
         ))}
       </div>
-      <TodoForm addTodo = {addTodo}/>
     </div>
   )
 }

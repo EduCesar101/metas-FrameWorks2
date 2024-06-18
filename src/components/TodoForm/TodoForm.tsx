@@ -1,12 +1,15 @@
 import { useState } from "react";
+import Modal from 'react-modal';
 
 interface TodoFormProps {
-    addTodo: (text: string, category: string) => void;
+    addTodo: (text: string, category: string, finalDate: string) => void;
 }
 
 export function TodoForm( { addTodo }: TodoFormProps ) {
     const [value, setValue] = useState("")
+    const [finalDate, setFinalDate] = useState("")
     const [category, setCategory] = useState("")
+    const [visible, setVisible] = useState(false)
 
     function handleSubmit(e: React.SyntheticEvent<HTMLFormElement>){
         e.preventDefault();
@@ -14,15 +17,24 @@ export function TodoForm( { addTodo }: TodoFormProps ) {
             alert("Preencha todos os campos!")
             return
         }
-        addTodo(value, category)
+        addTodo(value, category, finalDate)
         console.log("Enviou form");
         setValue("")
         setCategory("")
+        setVisible(false)
     }
 
     return(
         <div className="todo-form">
-            <h2>Criar tarefa: </h2>
+            <button onClick={() => setVisible(true)} className="Create">+ Criar Meta</button>
+            <Modal isOpen={visible} onRequestClose={() => setVisible(false)} style={{
+                overlay:{
+                    background: "rgba(0, 0, 0, 0.700)",
+                    boxSizing: "border-box"
+                    }
+                    }}>
+                    <div className="modalForm">
+                <h2>Criar meta: </h2>
             <form onSubmit={handleSubmit}>
                 <input type="text" placeholder="Digite o título" 
                 value={value}
@@ -33,8 +45,11 @@ export function TodoForm( { addTodo }: TodoFormProps ) {
                     <option value="Pessoal">Pessoal</option>
                     <option value="Estudos">Estudos</option>
                 </select>
-                <button type="submit">Criar Tarefa</button>
+                <input type="date" value={finalDate} onChange={(e) => setFinalDate(e.target.value)}/>
+                <button type="submit">Criar Meta</button>
             </form>
+                </div>
+            </Modal>
         </div>
     )
 }

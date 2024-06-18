@@ -44,6 +44,12 @@ button {
   transition: 0.3s;
 }
 
+.Create{
+  align-self: center;
+  padding: 15px;
+  text-align: center;
+}
+
 button:hover {
   opacity: 1;
 }
@@ -75,15 +81,43 @@ button:hover {
 
 .todo-form {
   padding-bottom: 1.5rem;
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+  justify-content: center;
 }
 
-input, select {
-  padding: 5px;
-  margin-bottom: 10px;
-  border: 1px solid #DDD;
-  width: 100%;
+.modalForm {
+  box-sizing: 90px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
+.modalForm form{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 50%;
+}
+
+.modalForm h2{
+  text-align: center;
+  }
+  
+  input, select {
+    padding: 5px;
+    margin-bottom: 10px;
+    border: 1px solid #DDD;
+    width: 100%;
+    }
+    
+    .modalForm input, select {
+      width: auto;
+    }
 .filter, .search {
   border-bottom: 1px solid #555;
   margin-bottom: 20px;
