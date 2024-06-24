@@ -1,22 +1,47 @@
+import { useState } from 'react'; 
+import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { db } from '../../services/firebase';
+
 interface StepProps {
-    id: number,
-    idTodo: number,
+    id: string,
+    idTodo: string,
     text: string,
     isCompleted: boolean,
-    removeStep: (id: number) => void,
-    completeStep: (id: number) => void
+    removeStep: (id: string) => void,
+    completeStep: (id: string) => void
 }
 
-export function Step({ id, text, removeStep, completeStep }: StepProps){
+export function Step({ id, text, removeStep, completeStep, isCompleted }: StepProps){
+    const handleCompleteStep = async () => {
+        try {
+          const stepRef = doc(db, 'steps', id);
+          await updateDoc(stepRef, {
+            isCompleted: !isCompleted
+          });
+          completeStep(id);
+        } catch (error) {
+          console.error("Error completing step: ", error);
+        }
+      };
+    
+      const handleRemoveStep = async () => {
+        try {
+          await deleteDoc(doc(db, 'steps', id));
+          removeStep(id);
+        } catch (error) {
+          console.error("Error removing step: ", error);
+        }
+      };
+
     return(
-        <div>
-            <div className="content">
-                <p>{text}</p>
-            </div>
-            <div>
-                <button onClick={() => completeStep(id)}>V</button>
-                <button onClick={() => removeStep(id)}>X</button>
-            </div>
-        </div>
+        <div className={`step ${isCompleted ? 'completed' : ''}`}>
+      <div className="content">
+        <p>{text}</p>
+      </div>
+      <div>
+        <button onClick={handleCompleteStep}>{isCompleted ? 'Desmarcar' : 'Completar'}</button>
+        <button onClick={handleRemoveStep}>Remover</button>
+      </div>
+    </div>
     )
 }

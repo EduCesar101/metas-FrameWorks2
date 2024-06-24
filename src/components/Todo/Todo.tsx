@@ -2,14 +2,14 @@ import { useState } from "react";
 
 
 interface TodoProps {
-  id: number;
+  id: string;
   text: string;
   category: string;
   finalDate: Date;
   isCompleted: boolean;
-  removeTodo: (id: number) => void
-  completeTodo: (id: number) => void
-  updateTodo: (id: number, text: string, category: string, finalDate: string) => void;
+  removeTodo: (id: string) => void
+  completeTodo: (id: string) => void
+  updateTodo: (id: string, text: string, category: string, finalDate: string) => void;
 }
 
 export function Todo( {id, text, category, finalDate, isCompleted, removeTodo, completeTodo, updateTodo }: TodoProps){
@@ -22,7 +22,6 @@ export function Todo( {id, text, category, finalDate, isCompleted, removeTodo, c
 
     const today = new Date().toDateString()
     const currentDate = new Date(today)
-    console.log(currentDate.toLocaleString())
 
     const handleUpdate = () => {
       updateTodo(id, updatedText, updatedCategory, updatedFinalDate);

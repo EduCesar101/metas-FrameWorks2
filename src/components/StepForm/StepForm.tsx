@@ -2,8 +2,8 @@ import { useState } from "react";
 import Modal from 'react-modal';
 
 interface StepFormProps {
-    idTodo: number,
-    addStep: (idTodo: number, text: string) => void;
+    idTodo: string,
+    addStep: (idTodo: string, text: string) => void;
 }
 
 export function StepForm( { idTodo, addStep }: StepFormProps) {

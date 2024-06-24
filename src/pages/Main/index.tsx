@@ -7,116 +7,135 @@ import Filter from '../../components/Filter/Filter';
 import { Step } from '../../components/Step/Step';
 import { StepForm } from '../../components/StepForm/StepForm';
 import { AuthGoogleContext } from '../../context/AuthGoogleContext';
+import { collection, getDocs, addDoc, doc, updateDoc, deleteDoc, query, where } from 'firebase/firestore';
+import { db } from '../../services/firebase';
+
+interface TodoType {
+  id: string;
+  text: string;
+  category: string;
+  finalDate: Date;
+  isCompleted: boolean;
+}
+
+interface StepType {
+  id: string;
+  text: string;
+  idTodo: string;
+  isCompleted: boolean;
+}
 
 export function Main() {
   const { user, signOut } = useContext(AuthGoogleContext)
   
 
-  const [todos, setTodos] = useState([
-    {
-      id: 1,
-      text: "Estudar React",
-      category: "Estudos",
-      finalDate: new Date('06-05-2024'),
-      isCompleted: false
-    },
-    {
-      id: 2,
-      text: "Treinar",
-      category: "Pessoal",
-      finalDate: new Date('01-05-2024'),
-      isCompleted: false,
-    },
-  ]);
+  const [todos, setTodos] = useState<TodoType[]>([]);
+  const [steps, setSteps] = useState<StepType[]>([]);
 
   const [genTodoId, setGenTodoId] = useState(2);
   const [genStepId, setGenStepId] = useState(0);
+  let loggedUser = JSON.parse(user)
 
-  const [steps, setSteps] = useState([
-    {
-      id: 0,
-      text: "",
-      idTodo: 0,
-      isCompleted: false
-    }
-  ]);
 
   const [search, setSearch] = useState("");
   
   const [filter, setFilter] = useState("All");
   const [sort, setSort] = useState("Asc")
 
-  const addTodo = ((text: string, category: string, finalDate: string) => {
-    const newID = genTodoId + 1
+  const fetchTodos = async (userId: string) => {
+    const todosRef = collection(db, 'todos');
+    const q = query(todosRef, where('userId', '==', userId));
+    const querySnapshot = await getDocs(q);
+    const fetchedTodos: TodoType[] = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+      finalDate: new Date(doc.data().finalDate.toDate())
+    } as TodoType));
+    setTodos(fetchedTodos);
+  };
+
+  const fetchSteps = async () => {
+    const stepsRef = collection(db, 'steps');
+    const querySnapshot = await getDocs(stepsRef);
+    const fetchedSteps: StepType[] = querySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    } as StepType));
+    setSteps(fetchedSteps);
+  };
+
+  const addTodo = (async (text: string, category: string, finalDate: string) => {
     const newDate = new Date(finalDate)
-    console.log(newDate)
-    console.log(newID)
-    const newTodos = [
-      ...todos,
+    const newTodo = 
       {
-        id: newID,
         text,
         category,
         finalDate: newDate,
-        isCompleted: false
-      },
-    ];
-    console.log(newTodos)
-    setTodos(newTodos)
-    setGenTodoId(newID)
+        isCompleted: false,
+        userId: loggedUser.uid
+      };
+    const docRef = await addDoc(collection(db, 'todos'), newTodo);
+    setTodos([...todos, { id: docRef.id, ...newTodo }]);
   })
 
-  const addStep = ((idTodo: number, text: string) => {
-    const newID = genStepId + 1
-    const newSteps = [
-      ...steps,
+
+
+  const removeTodo = ( async (id: string) => {
+    await deleteDoc(doc(db, 'todos', id));
+    setTodos(todos.filter(todo => todo.id !== id));
+  })
+
+  const completeTodo = ( async (id: string) => {
+    const todo = todos.find(todo => todo.id === id);
+    if (!todo) return;
+    const todoRef = doc(db, 'todos', id);
+    await updateDoc(todoRef, {
+      isCompleted: !todo.isCompleted
+    });
+    setTodos(todos.map(todo => (todo.id === id ? { ...todo, isCompleted: !todo.isCompleted } : todo)));
+  })
+
+  const updateTodo = async (id: string, updatedText: string, updatedCategory: string, updatedFinalDate: string) => {
+    const todoRef = doc(db, 'todos', id);
+    await updateDoc(todoRef, {
+      text: updatedText,
+      category: updatedCategory,
+      finalDate: new Date(updatedFinalDate)
+    });
+    setTodos(todos.map(todo => (todo.id === id ? { ...todo, text: updatedText, category: updatedCategory, finalDate: new Date(updatedFinalDate) } : todo)));
+  };
+
+  const addStep = ( async   (idTodo: string, text: string) => {
+    const newStep = 
       {
-        id: newID,
         text: text,
         idTodo: idTodo,
         isCompleted: false
-      },
-    ];
-
-    setSteps(newSteps);
-    setGenStepId(newID);
-    console.log(newSteps)
+      };
+    const docRef = await addDoc(collection(db, 'steps'), newStep);
+    setSteps([...steps, { id: docRef.id, ...newStep }]);
   })
 
-  const removeStep = ((id: number) => {
-    const newSteps = [...steps]
-    const filterSteps = newSteps.filter((step) => step.id !== id ? step : null);
-    setSteps(filterSteps);
+  const removeStep = ( async (id: string) => {
+    await deleteDoc(doc(db, 'steps', id));
+    setSteps(steps.filter(step => step.id !== id));
   })
 
-  const completeStep = ((id: number) => {
-    const newSteps = [...steps];
-    newSteps.map((step) => 
-      step.id === id ? step.isCompleted = !step.isCompleted : step);
-    setSteps(newSteps)
+  const completeStep = ( async (id: string) => {
+    const step = steps.find(step => step.id === id);
+    if (!step) return;
+    const stepRef = doc(db, 'steps', id);
+    await updateDoc(stepRef, {
+      isCompleted: !step.isCompleted
+    });
+    setSteps(steps.map(step => (step.id === id ? { ...step, isCompleted: !step.isCompleted } : step)));
+
   })
 
-  const removeTodo = ((id: number) => {
-    const newTodos = [...todos]
-    const filterTodos = newTodos.filter((todo) => todo.id !== id ? todo : null);
-    setTodos(filterTodos);
-  })
 
-  const completeTodo = ((id: number) => {
-    const newTodos = [...todos];
-    newTodos.map((todo) => 
-      todo.id === id ? todo.isCompleted = !todo.isCompleted : todo);
-    setTodos(newTodos)
-  })
 
-  const updateTodo = (id: number, updatedText: string, updatedCategory: string, updatedFinalDate: string) => {
-    const updatedTodos = todos.map((todo) =>
-      todo.id === id ? { ...todo, text: updatedText, category: updatedCategory, finalDate: new Date(updatedFinalDate) } : todo
-    );
-    setTodos(updatedTodos);
-  };
-
-  let loggedUser = JSON.parse(user)
+  fetchTodos(loggedUser.uid)
+  fetchSteps()
 
   return (
     <>
@@ -136,10 +155,10 @@ export function Main() {
           .filter((todo) => todo.text.toLowerCase().includes(search.toLowerCase()))
           .sort((a, b) => sort === "Asc" ? a.text.localeCompare(b.text) : b.text.localeCompare(a.text))
           .map((todo) => (
-            <div>
+            <div key={todo.id}>
               <Todo {...todo} key = {todo.id} removeTodo={removeTodo} completeTodo={completeTodo} updateTodo={updateTodo}/>
               {steps.filter((step) => step.idTodo == todo.id).map((step) => (
-                <div>
+                <div key={step.id}>
                   <Step {...step} key={step.id} removeStep={removeStep} completeStep={completeStep}/>
                 </div>
               ))}
