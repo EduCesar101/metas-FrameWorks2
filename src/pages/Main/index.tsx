@@ -52,6 +52,7 @@ export function Main() {
       finalDate: new Date(doc.data().finalDate.toDate())
     } as TodoType));
     setTodos(fetchedTodos);
+    console.log('fetchTodo')
   };
 
   const fetchSteps = async () => {
@@ -62,6 +63,7 @@ export function Main() {
       ...doc.data()
     } as StepType));
     setSteps(fetchedSteps);
+    console.log('fetchStep')
   };
 
   const addTodo = (async (text: string, category: string, finalDate: string) => {
@@ -140,9 +142,13 @@ export function Main() {
   return (
     <>
       <div className="app">
-        <img src={loggedUser.photoURL} alt="" />
-        <h1>Bem-vindo {loggedUser.displayName}</h1>
-        <button onClick={() => signOut()}>Sair</button>
+        <div className='profile'>
+          <div className='profile-name'>
+          <img src={loggedUser.photoURL} alt="" />
+          <strong>{loggedUser.displayName}</strong>
+          </div>
+          <button onClick={() => signOut()}>Sair</button>
+        </div>
       </div>
       <div className="app">
         <h1>Lista de Metas</h1>

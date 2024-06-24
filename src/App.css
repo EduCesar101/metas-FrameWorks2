@@ -3,18 +3,61 @@ body {
   background-color: #F4F4F4;
   padding: 30px;
   color: #333;
-  background-image: url('./assets/img/montain-bg.jpg');
+  /* background-image: url('./assets/img/montain-bg.jpg'); */
+  background-image: url('./assets/img/night.jpg');
   background-position: center;
   background-size: auto;
 }
 
 .app {
-  max-width: 600px;
+  max-width: 1000px;
   margin: 0 auto;
   margin-bottom: 10px;
   background-color: #EFEFEF;
   padding: 20px 30px;
   border-radius: 10px;
+}
+
+.home{
+  display: flex;
+  flex-direction: column;
+  max-width: 1000px;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  background-color: #EFEFEF;
+  padding: 20px 30px;
+  border-radius: 10px;
+  font-size: 20px;
+}
+
+.imghome {
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  box-sizing: border-box;
+}
+
+.home img {
+  width: 500px;
+}
+
+
+.profile {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  justify-content: space-between;
+}
+.profile img {
+  width: 50px;
+  height: 50px;
+  border-radius: 25px;
+  margin-right: 30px;
+}
+
+.profile-name{
+  display: flex;
+  align-content: center;
 }
 
 h1 {
@@ -43,6 +86,12 @@ button {
   cursor: pointer;
   opacity: 0.8;
   transition: 0.3s;
+}
+
+.bLogin{
+  padding: 15px;
+  margin: 50px;
+  font-size: 20px;
 }
 
 .Create{
