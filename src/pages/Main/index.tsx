@@ -1,4 +1,4 @@
-import { useState } from 'react' 
+import { useContext, useState } from 'react' 
 import '../../App.css'
 import { Todo } from '../../components/Todo/Todo';
 import { TodoForm } from '../../components/TodoForm/TodoForm'
@@ -6,8 +6,12 @@ import { Search } from '../../components/Search/Search';
 import Filter from '../../components/Filter/Filter';
 import { Step } from '../../components/Step/Step';
 import { StepForm } from '../../components/StepForm/StepForm';
+import { AuthGoogleContext } from '../../context/AuthGoogleContext';
 
 export function Main() {
+  const { user, signOut } = useContext(AuthGoogleContext)
+  
+
   const [todos, setTodos] = useState([
     {
       id: 1,
@@ -112,29 +116,38 @@ export function Main() {
     setTodos(updatedTodos);
   };
 
+  let loggedUser = JSON.parse(user)
+
   return (
-    <div className="app">
-      <h1>Lista de Metas</h1>
-      <Search search={search} setSearch={setSearch}/>
-      <Filter filter={filter} setFilter={setFilter} setSort={setSort}/>
-      <TodoForm addTodo = {addTodo}/>
-      <div className="todo-list">
-        {todos
-        .filter((todo) => filter === "All" ? true : filter === "Completed" ? todo.isCompleted : !todo.isCompleted)
-        .filter((todo) => todo.text.toLowerCase().includes(search.toLowerCase()))
-        .sort((a, b) => sort === "Asc" ? a.text.localeCompare(b.text) : b.text.localeCompare(a.text))
-        .map((todo) => (
-          <div>
-            <Todo {...todo} key = {todo.id} removeTodo={removeTodo} completeTodo={completeTodo} updateTodo={updateTodo}/>
-            {steps.filter((step) => step.idTodo == todo.id).map((step) => (
-              <div>
-                <Step {...step} key={step.id} removeStep={removeStep} completeStep={completeStep}/>
-              </div>
-            ))}
-          <StepForm idTodo={todo.id} addStep = {addStep}/>
-          </div>
-        ))}
+    <>
+      <div className="app">
+        <img src={loggedUser.photoURL} alt="" />
+        <h1>Bem-vindo {loggedUser.displayName}</h1>
+        <button onClick={() => signOut()}>Sair</button>
       </div>
-    </div>
+      <div className="app">
+        <h1>Lista de Metas</h1>
+        <Search search={search} setSearch={setSearch}/>
+        <Filter filter={filter} setFilter={setFilter} setSort={setSort}/>
+        <TodoForm addTodo = {addTodo}/>
+        <div className="todo-list">
+          {todos
+          .filter((todo) => filter === "All" ? true : filter === "Completed" ? todo.isCompleted : !todo.isCompleted)
+          .filter((todo) => todo.text.toLowerCase().includes(search.toLowerCase()))
+          .sort((a, b) => sort === "Asc" ? a.text.localeCompare(b.text) : b.text.localeCompare(a.text))
+          .map((todo) => (
+            <div>
+              <Todo {...todo} key = {todo.id} removeTodo={removeTodo} completeTodo={completeTodo} updateTodo={updateTodo}/>
+              {steps.filter((step) => step.idTodo == todo.id).map((step) => (
+                <div>
+                  <Step {...step} key={step.id} removeStep={removeStep} completeStep={completeStep}/>
+                </div>
+              ))}
+            <StepForm idTodo={todo.id} addStep = {addStep}/>
+            </div>
+          ))}
+        </div>
+      </div>
+    </>
   )
 }
