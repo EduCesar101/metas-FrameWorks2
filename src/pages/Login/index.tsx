@@ -19,7 +19,7 @@ export function Login(){
         <div className="home">
             <h1>Entre com sua conta Google</h1>
             <div className="imghome">
-            <img src={defaultProfilePhoto} alt="" />
+            <img src={defaultProfilePhoto} alt="" style={{borderRadius: "250px"}}/>
             </div>
             <button onClick={() => loginGoogle()} className="bLogin">Entrar com Google</button>
         </div>

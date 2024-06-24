@@ -3,12 +3,12 @@ import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from "firebase/firestore";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBuHOa0WkhSrPHVBF__NMFc9qWglYST3b4",
-  authDomain: "goal-app-auth-beta.firebaseapp.com",
-  projectId: "goal-app-auth-beta",
-  storageBucket: "goal-app-auth-beta.appspot.com",
-  messagingSenderId: "608705532865",
-  appId: "1:608705532865:web:c283c4ed8a53f3576a1540"
+    apiKey: "AIzaSyBkd2ZLlljyRqsztXP_o5mgf8T_eIaSrrE",
+    authDomain: "atividade-frameworks-44fa0.firebaseapp.com",
+    projectId: "atividade-frameworks-44fa0",
+    storageBucket: "atividade-frameworks-44fa0.appspot.com",
+    messagingSenderId: "1011256090494",
+    appId: "1:1011256090494:web:eabd7183736861bed59d2f"
 };
 
 export const app = initializeApp(firebaseConfig);
