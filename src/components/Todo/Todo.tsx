@@ -53,7 +53,7 @@ export function Todo( {id, text, category, finalDate, isCompleted, removeTodo, c
       (
         <div>
             <div className="content">
-              { finalDate < currentDate && <span>Atrasado</span>}
+              { finalDate < currentDate && <span style={{color: 'red', fontWeight: 'bold'}}>Atrasado</span>}
               <p>{text}</p>
               <p>({category})</p>
               <p style={{color: finalDate >= currentDate ? 'blue': 'red'}}>{finalDate.toLocaleDateString("pt-BR")}</p>
