@@ -1,4 +1,3 @@
-import { useState } from 'react'; 
 import { doc, updateDoc, deleteDoc } from 'firebase/firestore';
 import { db } from '../../services/firebase';
 
@@ -39,7 +38,7 @@ export function Step({ id, text, removeStep, completeStep, isCompleted }: StepPr
         <p style={{textDecoration: isCompleted ? "line-through" : ""}}>{text}</p>
       </div>
       <div>
-        <button onClick={handleCompleteStep}>{isCompleted ? 'Desmarcar' : 'Completar'}Completar</button>
+        <button onClick={handleCompleteStep}>{isCompleted ? 'Desmarcar' : 'Completar'}</button>
         <button onClick={handleRemoveStep}>Remover</button>
       </div>
     </div>

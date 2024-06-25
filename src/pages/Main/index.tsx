@@ -31,9 +31,6 @@ export function Main() {
 
   const [todos, setTodos] = useState<TodoType[]>([]);
   const [steps, setSteps] = useState<StepType[]>([]);
-
-  const [genTodoId, setGenTodoId] = useState(2);
-  const [genStepId, setGenStepId] = useState(0);
   let loggedUser = JSON.parse(user)
 
 

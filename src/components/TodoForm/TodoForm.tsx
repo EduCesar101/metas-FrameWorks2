@@ -44,6 +44,8 @@ export function TodoForm( { addTodo }: TodoFormProps ) {
                     <option value="Trabalho">Trabalho</option>
                     <option value="Pessoal">Pessoal</option>
                     <option value="Estudos">Estudos</option>
+                    <option value="Lazer">Lazer</option>
+                    <option value="Outros">Outros</option>
                 </select>
                 <input type="date" value={finalDate} onChange={(e) => setFinalDate(e.target.value)}/>
                 <button type="submit">Criar Meta</button>

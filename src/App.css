@@ -3,8 +3,8 @@ body {
   background-color: #F4F4F4;
   padding: 30px;
   color: #333;
-  /* background-image: url('./assets/img/montain-bg.jpg'); */
-  background-image: url('./assets/img/night.jpg');
+  background-image: url('./assets/img/montain-bg.jpg');
+  /* background-image: url('./assets/img/night.jpg'); */
   background-position: center;
   background-size: auto;
 }
@@ -78,7 +78,7 @@ input {
 }
 
 button {
-  background-color: #333974;
+  background-color: #284caf;
   color: #FFF;
   padding: 5px 10px;
   margin-right: 10px;
